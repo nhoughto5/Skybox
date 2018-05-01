@@ -1,0 +1,8 @@
+Toughts on improvements:
+
+1.) End array could be an array of pointers. Randomize which Card memory addresses they point to.
+2.) Use a c++ style array (std::array, std::vector)
+
+LookUps:
+1.) Originally was going to use #define for the constant but had a hunch it was not best practice. Looked it up.
+2.) Visual studio gave me compile errors for _TCHAR and strlen. Had to look up what headers they are in.

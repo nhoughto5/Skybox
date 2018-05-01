@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <set>
 #include "tchar.h"
-const int ARRAY_SIZE = 52;
+const unsigned int ARRAY_SIZE = 52;
+
 class Card {
 public:
-    Card() {}
+    Card() : mCardName(nullptr) {}
     void SetCardName(const char* cardName) {
         mCardName = (char*) malloc(strlen(cardName));
         mCardName = cardName;
@@ -27,17 +28,17 @@ const char *CardList[] = {"AD", "KD", "QD", "JD", "10D", "9D", "8D", "7D", "6D",
 Card StartingCardList[ARRAY_SIZE];
 Card EndingCardList[ARRAY_SIZE];
 void PrintCardList(Card* cardslist);
+
 int _tmain(int argc, _TCHAR* argv[]) {
     for (size_t i = 0; i < ARRAY_SIZE; ++i) {
         StartingCardList[i].SetCardName(CardList[i]);
     }
 
-    std::set<size_t> usedIndices;
+    std::set<int> usedIndices;
     for (size_t i = 0; i < ARRAY_SIZE; ++i) {
-        size_t t;
+        unsigned int t;
         do {
             t = rand() % 52;
-
         } while (usedIndices.find(t) != usedIndices.end());
         usedIndices.emplace(t);
         EndingCardList[i].SetCardName(CardList[t]);
@@ -45,7 +46,6 @@ int _tmain(int argc, _TCHAR* argv[]) {
     PrintCardList(StartingCardList);
     printf("\n");
     PrintCardList(EndingCardList);
-    //Print the new shuffled array HERE!
     return 0;
 }
 void PrintCardList(Card* cardslist) {
