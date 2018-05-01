@@ -6,3 +6,5 @@ Toughts on improvements:
 LookUps:
 1.) Originally was going to use #define for the constant but had a hunch it was not best practice. Looked it up.
 2.) Visual studio gave me compile errors for _TCHAR and strlen. Had to look up what headers they are in.
+3.) Looked up best practice of size_t.
+4.) Looked up std::set.find syntax
