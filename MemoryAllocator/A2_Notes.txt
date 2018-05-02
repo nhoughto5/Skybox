@@ -1,0 +1,50 @@
+Assignment 2 Notes:
+1.) I found right away that there was not enough space allocated for the stack to
+	create the memoryPool array. The desired size was 512 * 1024 * 1024 times 8 bytes (for each char)
+	which accumulates to 4.29GB. I discovered that visual studio sets the stack reserve size to 1MB
+
+	A quick quasi-solution would be to modify the array to be a static member as they are not stack allocated.
+	This however modifies the class signature and is undesirable.
+	
+	Secondly, to prevent modifying the class signature the `Stack Reserve Size` can be increased. 
+	Increasing the `Stack Reserve Size` modestly would seem alright however moving it from 1MB to over 4.29GB seems like severely bad practice.
+
+	Finally, a better solution would be to allocate this large array on the Heap.
+	This can be done in two ways.
+
+	a.) By changing the member `memoryPool` to a char* declaration and creating the array with the new keyword in the constructor.
+		This method allows the memory allocation issue to be abstracted from the user of the memory pool. 
+		The user can allocate a MemoryPool object either on the stack (e.g. MemoryAllocator m;) or on the heap (ex MemoryAllocator *m = new MemoryAllocator()).
+		Either way the very large array will be allocated on the heap.
+		This method seems better practice. Technically, it doesn't change the definition either as `memoryPool[MemoryPoolSize]` is just a pointer and changing it `char* memoryPool` 
+		makes no difference to the class structure. However it does modify the memory allocation behavior on instantiation.
+		The instructions for the task allow expansion but do not clarify modification to the class interface so I will not use this method. 
+		However, in practice I would argue to make this change.
+
+	b.) Only initializing MemoryAllocator instances on the heap (ex MemoryAllocator *m = new MemoryAllocator()). I feel this is bad practice as it leaves the user of the class responsible
+		for de-allocating the massive memory pool as well as may the class difficult to use by those unaware of the constraint. I will use this method however to avoid modifying the class interface provided.
+
+2.) The class was given an additional char pointer which points to the next available memory address in the pool.
+
+3.) According to the class definition provided, when instantiated the memoryPool array is allocated/reserved automatically by the language/OS. 
+	The values given to the elements in the array will differ depending on compiler and debug/release mode. 
+	They may be left as garbage or pre-initialized to '\0' for testing purposes. 
+	Because the array is technically already allocated, the execution of the Allocate method will reassign the content of the array-element to 'A'.
+	Deallocation by the Free method will reset the element value to '\0'.
+
+4.) There was no expected behavior given so the following will be implemented:
+	a.) The class will keep track of the 'next open' address of the memory pool. Allocation will begin at this location until complete.
+	b.) Should the allocate method attempt to overwrite a memory address currently containing the value 'A', it will throw a run_time error and exit with code(1).
+	c.) Should the allocate method reach the end of the pool it shall loop back to the beginning of the array to continue allocating. 
+
+5.) There are a few examples of unit tests I would implement. These few tests are far from comprehensive however should ensure the basic operation of the class is maintained. 
+
+
+Improvements:
+There are clearly improvements that can be made to the current implementation however I wanted to stick close to the 2 hour time limit described.
+
+1.) The reliance on having the class instantiaed on the heap is far from desireable and should be remedied. 
+	This would require modifications to the class definition which I wanted to avoid but if were done in a real context there would be several opportunities for design improvement.
+2.) The allocate method uses both a pointer and a 'current' variable. This is an overlap of responsibilities and should be reduced to a single parameter.
+3.) The Free method relies on a double cast, one of which is a reinterpret_cast. This is very risky, the class should be refactored to allow a better solution.
+4.) More tests

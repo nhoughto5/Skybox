@@ -15,11 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <Text Include="A2_Notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Notes.txt" />
+    <ClCompile Include="a2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
